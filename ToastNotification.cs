@@ -3,28 +3,40 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace UI {
+  public static class VisualElementExts {
+    public static VisualElement WithName(this VisualElement element, string name) {
+      element.name = name;
+      return element;
+    }
+
+    public static VisualElement WithClass(this VisualElement element, string className) {
+      element.AddToClassList(className);
+      return element;
+    }
+  }
+
   public class ToastNotification : VisualElement {
     [UnityEngine.Scripting.Preserve]
     public new class UxmlFactory : UxmlFactory<ToastNotification, UxmlTraits> { }
 
     [UnityEngine.Scripting.Preserve]
     public new class UxmlTraits : VisualElement.UxmlTraits {
-			private readonly UxmlStringAttributeDescription notificationTitle = new UxmlStringAttributeDescription { name = "notification-title", defaultValue = "" };
-			private readonly UxmlStringAttributeDescription notificationMessage = new UxmlStringAttributeDescription { name = "notification-message", defaultValue = "" };
+      private readonly UxmlStringAttributeDescription notificationTitle = new UxmlStringAttributeDescription { name = "notification-title", defaultValue = "" };
+      private readonly UxmlStringAttributeDescription notificationMessage = new UxmlStringAttributeDescription { name = "notification-message", defaultValue = "" };
       private readonly UxmlFloatAttributeDescription notificationLength = new UxmlFloatAttributeDescription { name = "notification-length", defaultValue = -1f };
-			private readonly UxmlBoolAttributeDescription allowCancellation = new UxmlBoolAttributeDescription { name = "allow-cancellation", defaultValue = true };
-			private readonly UxmlStringAttributeDescription iconContent = new UxmlStringAttributeDescription { name = "icon-content", defaultValue = "\u00D7" };
+      private readonly UxmlBoolAttributeDescription allowCancellation = new UxmlBoolAttributeDescription { name = "allow-cancellation", defaultValue = true };
+      private readonly UxmlStringAttributeDescription iconContent = new UxmlStringAttributeDescription { name = "icon-content", defaultValue = "\u00D7" };
 
-			public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc) {
-				base.Init(ve, bag, cc);
+      public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc) {
+        base.Init(ve, bag, cc);
 
-				var item = ve as ToastNotification;
+        var item = ve as ToastNotification;
         item.NotificationTitle = notificationTitle.GetValueFromBag(bag, cc);
         item.NotificationMessage = notificationMessage.GetValueFromBag(bag, cc);
         item.NotificationLength = notificationLength.GetValueFromBag(bag, cc);
         item.AllowCancellation = allowCancellation.GetValueFromBag(bag, cc);
         item.IconContent = iconContent.GetValueFromBag(bag, cc);
-			}
+      }
     }
 
     public string NotificationTitle { get; private set; } = "";
@@ -40,7 +52,7 @@ namespace UI {
     protected VisualElement mainPanel;
     public override VisualElement contentContainer => mainPanel;
 
-		private const string ussStyleSheet = "Styles/ToastNotification";
+    private const string ussStyleSheet = "Styles/ToastNotification";
     private const string ussClassName = "toast-notification";
     private const string ussHiddenClass = "hidden-notification";
     private const string ussContainer = ussClassName + "__container";
@@ -72,7 +84,7 @@ namespace UI {
     }
 
     private void BuildNotification() {
-			styleSheets.Add(Resources.Load<StyleSheet>(ussStyleSheet));
+      styleSheets.Add(Resources.Load<StyleSheet>(ussStyleSheet));
 
       pickingMode = PickingMode.Ignore;
       AddToClassList(ussHiddenClass);
@@ -138,24 +150,24 @@ namespace UI {
 
     [UnityEngine.Scripting.Preserve]
     public new class UxmlTraits : VisualElement.UxmlTraits {
-			private readonly UxmlIntAttributeDescription maxNotifications = new UxmlIntAttributeDescription { name = "max-notifications", defaultValue = 4 };
+      private readonly UxmlIntAttributeDescription maxNotifications = new UxmlIntAttributeDescription { name = "max-notifications", defaultValue = 4 };
 
-			public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc) {
-				base.Init(ve, bag, cc);
+      public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc) {
+        base.Init(ve, bag, cc);
 
-				var item = ve as ToastPanel;
+        var item = ve as ToastPanel;
         item.MaxNotifications = maxNotifications.GetValueFromBag(bag, cc);
-			}
+      }
     }
 
     public int MaxNotifications { get; private set; } = 4;
 
     protected VisualElement mainPanel;
-		protected IVisualElementScheduledItem task;
+    protected IVisualElementScheduledItem task;
     public override VisualElement contentContainer => mainPanel;
 
     private const int refreshInterval = 10; // ms
-		private const string ussStyleSheet = "Styles/ToastNotification";
+    private const string ussStyleSheet = "Styles/ToastNotification";
     private const string ussClassName = "toast-panel";
     private const string ussContainer = ussClassName + "__container";
 
@@ -170,7 +182,7 @@ namespace UI {
     }
 
     private void BuildPanel() {
-			styleSheets.Add(Resources.Load<StyleSheet>(ussStyleSheet));
+      styleSheets.Add(Resources.Load<StyleSheet>(ussStyleSheet));
 
       pickingMode = PickingMode.Ignore;
       AddToClassList(ussClassName);
